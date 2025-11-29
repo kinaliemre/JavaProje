@@ -1,5 +1,12 @@
 package Main;
 
-public class Completable {
 
-}
+	public interface Completable {
+	
+		void complete();
+		boolean isCompleted();
+	
+	}
+	
+	
+
