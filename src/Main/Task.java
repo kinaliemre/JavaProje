@@ -67,19 +67,38 @@ public void setDeadline(Deadline deadline) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+public boolean isOverdue(LocalDateTime now) {
+    if (deadline == null) {
+        return false;
+    }
+    return deadline.isPast(now);
 }
+
+@Override
+public String toString() {
+    String status = completed ? "TAMAMLANDI" : "BEKLIYOR";
+    String dueText = (deadline != null) ? deadline.getDueDate().toString() : "YOK";
+    return "[" + id + "] " + title +
+           " | Tarih: " + dueText +
+           " | Durum: " + status +
+           " | Öncelik: " + priority;
+}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
