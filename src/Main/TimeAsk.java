@@ -18,4 +18,31 @@ public class TimeAsk extends Task {
     
     
     }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(durationMinutes);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+               " | Başlangıç: " + startTime +
+               " | Süre(dk): " + durationMinutes;
+    }
 }
+    
+    
+    
+    
+    
+    
+    
+
