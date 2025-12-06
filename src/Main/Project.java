@@ -48,7 +48,21 @@ public Task findTaskById(int taskId) {
     return null;
 }
 
-
+public List<Task> getTasksSortedByDeadline() {
+    List<Task> copy = new ArrayList<>(tasks);
+    Collections.sort(copy, new Comparator<Task>() {
+        
+    	@Override
+        public int compare(Task t1, Task t2) {
+            if (t1.getDeadline() == null && t2.getDeadline() == null) return 0;
+            if (t1.getDeadline() == null) return 1;
+            if (t2.getDeadline() == null) return -1;
+            return t1.getDeadline().getDueDate()
+                     .compareTo(t2.getDeadline().getDueDate());
+        }
+    });
+    return copy;
+}
 
 
 
