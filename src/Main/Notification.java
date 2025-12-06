@@ -16,5 +16,17 @@ public class Notification{
 		this.notifyAt = notifyAt;
 		this.task = task;
 	}
+	public Task getTask() {
+		return task;
+	}
+	public boolean isTimeToNotify(LocalDateTime now) {
+		return !task.isCompleted() && !now.isBefore(notifyAt);
+	}
 	
+	@Override
+    public String toString() {
+        return "Bildirim[" + id + "] " + message +
+               " | Zaman: " + notifyAt +
+               " | Görev: " + task.getTitle();
+    }
 }
