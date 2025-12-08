@@ -31,4 +31,11 @@ public List<Project> getProjects() {
     return projects;
 }
 
+public List<Task> getUpcomingTasks(LocalDateTime now) {
+    List<Task> result = new ArrayList<>();
+    for (Project p : projects) {
+        result.addAll(p.getUpcomingTasks(now));
+    }
+    return result;
+}
 }
