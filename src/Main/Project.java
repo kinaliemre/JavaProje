@@ -91,7 +91,9 @@ public class Project {
     public List<Task> getUpcomingTasks(LocalDateTime now) {
         List<Task> result = new ArrayList<>();
         for (Task t : tasks) {
-            if (!t.isCompleted() && !t.isOverdue(now)) {
+            if (t.getDeadline() != null
+                    && !t.isCompleted()
+                    && !t.isOverdue(now)) {
                 result.add(t);
             }
         }
