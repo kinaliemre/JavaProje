@@ -13,15 +13,7 @@ public class User {
     private String password;
     private List<Project> projects;
 
-    public User(int id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.projects = new ArrayList<>();
-    }
-
-    public User(int id, String name, String email,
-                String username, String password) {
+    public User(int id, String name, String email, String username, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -51,10 +43,7 @@ public class User {
     }
 
     public boolean checkPassword(String password) {
-        if (this.password == null) {
-            return false;
-        }
-        return this.password.equals(password);
+        return this.password != null && this.password.equals(password);
     }
 
     public void addProject(Project project) {

@@ -11,31 +11,17 @@ import java.util.List;
 
 public class UserCsvRepository {
 
-    public static void saveUsers(String fileName, List<User> users) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
-            for (User u : users) {
-                String line = u.getId() + ";" +
-                              safe(u.getName()) + ";" +
-                              safe(u.getEmail()) + ";" +
-                              safe(u.getUsername()) + ";" +
-                              safe(u.getPassword());
-                bw.write(line);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Kullanıcı dosyası yazma hatası: " + e.getMessage());
-        }
-    }
-
     public static List<User> loadUsers(String fileName) {
         List<User> users = new ArrayList<>();
         File file = new File(fileName);
+
         if (!file.exists()) {
             return users;
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
+
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
@@ -60,6 +46,23 @@ public class UserCsvRepository {
         }
 
         return users;
+    }
+
+    public static void saveUsers(String fileName, List<User> users) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+            for (User u : users) {
+                String line =
+                        u.getId() + ";" +
+                        safe(u.getName()) + ";" +
+                        safe(u.getEmail()) + ";" +
+                        safe(u.getUsername()) + ";" +
+                        safe(u.getPassword());
+                bw.write(line);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Kullanıcı dosyası yazma hatası: " + e.getMessage());
+        }
     }
 
     private static String safe(String s) {

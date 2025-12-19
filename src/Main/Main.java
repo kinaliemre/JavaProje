@@ -7,25 +7,72 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final String ADMIN_USERNAME = "Admin";
-    private static final String ADMIN_PASSWORD = "admin1234";
-    private static final String TASK_FILE = "tasks.csv";
+	private static final String USERS_FILE = "users.csv";
+	
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    	Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Görev Yönetim Sistemi ===");
+    	System.out.println("=== Görev Yönetim Sistemi ===");
 
-        if (!login(scanner)) {
-            System.out.println("Çok fazla hatalı deneme. Program kapatılıyor.");
-            return;
-        }
+    	List<User> users = UserCsvRepository.loadUsers(USERS_FILE);
 
-        User user = new User(1, ADMIN_USERNAME, "admin@example.com");
-        Project project = new Project(1, "Varsayılan Proje", "Admin görevleri");
-        user.addProject(project);
+    	User user = null;
+    	boolean authenticated = false;
 
-        List<Task> loadedTasks = TaskCsvRepository.loadTasks(TASK_FILE);
+    	while (!authenticated) {
+    	    System.out.println();
+    	    System.out.println("1) Giriş yap");
+    	    System.out.println("2) Kayıt ol");
+    	    System.out.println("0) Çıkış");
+    	    System.out.print("Seçiminiz: ");
+    	    String firstChoice = scanner.nextLine().trim();
+
+    	    switch (firstChoice) {
+    	        case "1": {
+    	            if (users.isEmpty()) {
+    	                System.out.println("Henüz kayıtlı kullanıcı yok. Lütfen önce kayıt olun.");
+    	            } else {
+    	                user = login(scanner, users);
+    	                if (user == null) {
+    	                    System.out.println("Çok fazla hatalı deneme. Program kapatılıyor.");
+    	                    scanner.close();
+    	                    return;
+    	                }
+    	                authenticated = true;
+    	            }
+    	            break;
+    	        }
+    	        case "2": {
+    	            user = register(scanner, users);
+    	            users.add(user);
+    	            UserCsvRepository.saveUsers(USERS_FILE, users);
+    	            authenticated = true;
+    	            break;
+    	        }
+    	        case "0": {
+    	            System.out.println("Program sonlandırılıyor...");
+    	            scanner.close();
+    	            return;
+    	        }
+    	        default: {
+    	            System.out.println("Geçersiz seçim, tekrar deneyin.");
+    	            break;
+    	        }
+    	    }
+    	}
+
+    	System.out.println("Giriş başarılı, hoş geldin " + user.getName() + ".");
+    	String taskFileName = "tasks_" + user.getUsername() + ".csv";
+
+
+
+    	Project project = new Project(1, "Varsayılan Proje", "Kullanıcı görevleri");
+    	user.addProject(project);
+
+
+    	List<Task> loadedTasks = TaskCsvRepository.loadTasks(taskFileName);
+
         for (Task t : loadedTasks) {
             project.addTask(t);
         }
@@ -73,7 +120,8 @@ public class Main {
                         );
                     }
 
-                    TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
+                    TaskCsvRepository.saveTasks(taskFileName, project.getTasks());
+
                     System.out.println("Görev eklendi ve kaydedildi.");
                     break;
                 }
@@ -103,7 +151,8 @@ public class Main {
                         System.out.println("Bu id'ye sahip görev yok.");
                     } else {
                         task.complete();
-                        TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
+                        TaskCsvRepository.saveTasks(taskFileName, project.getTasks());
+
                         System.out.println("Görev tamamlandı ve kaydedildi.");
                     }
                     break;
@@ -134,7 +183,8 @@ public class Main {
                             notifications.removeIf(n ->
                                     n.getTask() != null && n.getTask().getId() == id);
 
-                            TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
+                            TaskCsvRepository.saveTasks(taskFileName, project.getTasks());
+
                             System.out.println("Görev silindi ve değişiklikler kaydedildi.");
                         } else {
                             System.out.println("Görev silinemedi.");
@@ -144,7 +194,8 @@ public class Main {
                 }
 
                 case 0:
-                    TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
+                	TaskCsvRepository.saveTasks(taskFileName, project.getTasks());
+
                     System.out.println("Görevler kaydedildi. Program sonlandırılıyor...");
                     running = false;
                     break;
@@ -156,7 +207,7 @@ public class Main {
         scanner.close();
     }
 
-    private static boolean login(Scanner scanner) {
+    private static User login(Scanner scanner, List<User> users) {
         int attempts = 0;
         while (attempts < 3) {
             System.out.print("Kullanıcı adı: ");
@@ -164,16 +215,60 @@ public class Main {
             System.out.print("Şifre: ");
             String password = scanner.nextLine();
 
-            if (ADMIN_USERNAME.equals(username) &&
-                ADMIN_PASSWORD.equals(password)) {
-                System.out.println("Giriş başarılı, hoş geldin " + ADMIN_USERNAME + ".");
-                return true;
+            for (User u : users) {
+                if (u.getUsername() != null &&
+                    u.getUsername().equals(username) &&
+                    u.checkPassword(password)) {
+                    return u;
+                }
             }
 
             System.out.println("Hatalı kullanıcı adı veya şifre.");
             attempts++;
         }
-        return false;
+        return null;
+    }
+    private static User register(Scanner scanner, List<User> users) {
+        System.out.println("=== Kayıt Ol ===");
+        System.out.print("Ad Soyad: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+
+        String username;
+        while (true) {
+            System.out.print("Kullanıcı adı: ");
+            username = scanner.nextLine();
+
+            boolean exists = false;
+            for (User u : users) {
+                if (u.getUsername() != null &&
+                    u.getUsername().equals(username)) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                break;
+            }
+
+            System.out.println("Bu kullanıcı adı zaten kullanılıyor, başka bir tane deneyin.");
+        }
+
+        System.out.print("Şifre: ");
+        String password = scanner.nextLine();
+
+        int newId = 0;
+        for (User u : users) {
+            if (u.getId() > newId) {
+                newId = u.getId();
+            }
+        }
+        newId++;
+
+        return new User(newId, name, email, username, password);
     }
 
     private static void printMenu() {
