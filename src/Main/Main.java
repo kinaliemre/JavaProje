@@ -118,7 +118,31 @@ public class Main {
                     System.out.println("Zamanı gelmiş bildirimler:");
                     checkNotifications(notifications, LocalDateTime.now());
                     break;
+                     }
+               
+                case 8: {
+                    System.out.print("Silinecek görev id: ");
+                    int id = readInt(scanner);
+
+                    Task task = project.findTaskById(id);
+                    if (task == null) {
+                        System.out.println("Bu id'ye sahip görev bulunamadı.");
+                    } else {
+                        boolean removed = project.removeTaskById(id);
+
+                        if (removed) {
+                            notifications.removeIf(n ->
+                                    n.getTask() != null && n.getTask().getId() == id);
+
+                            TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
+                            System.out.println("Görev silindi ve değişiklikler kaydedildi.");
+                        } else {
+                            System.out.println("Görev silinemedi.");
+                        }
+                    }
+                    break;
                 }
+
                 case 0:
                     TaskCsvRepository.saveTasks(TASK_FILE, project.getTasks());
                     System.out.println("Görevler kaydedildi. Program sonlandırılıyor...");
@@ -162,6 +186,7 @@ public class Main {
         System.out.println("5) Görevi tamamlandı işaretle");
         System.out.println("6) Yaklaşan görevleri listele");
         System.out.println("7) Bildirimleri kontrol et");
+        System.out.println("8) Görevi sil");
         System.out.println("0) Çıkış");
         System.out.print("Seçiminiz: ");
     }
