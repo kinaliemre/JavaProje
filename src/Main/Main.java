@@ -177,61 +177,7 @@ public class Main {
         }
     }
 
-    private static Task createTask(Scanner scanner, int id) {
-        System.out.print("Görev başlığı: ");
-        String title = scanner.nextLine();
-
-        System.out.print("Açıklama: ");
-        String description = scanner.nextLine();
-
-        System.out.print("Öncelik (1-5): ");
-        int priority = readInt(scanner);
-
-        System.out.println("Bitiş tarihi:");
-        System.out.print("Yıl: ");
-        int year = readInt(scanner);
-        System.out.print("Ay (1-12): ");
-        int month = readInt(scanner);
-        System.out.print("Gün: ");
-        int day = readInt(scanner);
-        System.out.print("Saat (0-23): ");
-        int hour = readInt(scanner);
-        System.out.print("Dakika (0-59): ");
-        int minute = readInt(scanner);
-        LocalDateTime due = LocalDateTime.of(year, month, day, hour, minute);
-
-        System.out.print("Bu görev zamanlanmış (TimeAsk) olsun mu? (E/H): ");
-        String answer = scanner.nextLine().trim().toUpperCase();
-
-        Task task;
-        if (answer.equals("E")) {
-            System.out.println("Başlangıç zamanı:");
-            System.out.print("Yıl: ");
-            int sy = readInt(scanner);
-            System.out.print("Ay (1-12): ");
-            int sm = readInt(scanner);
-            System.out.print("Gün: ");
-            int sd = readInt(scanner);
-            System.out.print("Saat (0-23): ");
-            int sh = readInt(scanner);
-            System.out.print("Dakika (0-59): ");
-            int smin = readInt(scanner);
-            LocalDateTime start = LocalDateTime.of(sy, sm, sd, sh, smin);
-
-            System.out.print("Süre (dakika): ");
-            int duration = readInt(scanner);
-
-            task = new TimeAsk(id, title, description, start, duration);
-        } else {
-            task = new Task(id, title, description);
-        }
-
-        task.setPriority(priority);
-        task.setDeadline(new Deadline(due));
-
-        return task;
-    }
-
+    
     private static void printTaskList(List<Task> tasks) {
         if (tasks.isEmpty()) {
             System.out.println("Görev yok.");
@@ -254,7 +200,88 @@ public class Main {
         if (!any) {
             System.out.println("Şu anda zamanı gelen bildirim yok.");
         }
+    }private static Task createTask(Scanner scanner, int id) {
+        System.out.print("Görev başlığı: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Açıklama: ");
+        String description = scanner.nextLine();
+
+        System.out.print("Öncelik (1-5): ");
+        int priority = readInt(scanner);
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime due;
+
+        while (true) {
+            System.out.println("Bitiş tarihi:");
+            System.out.print("Yıl: ");
+            int year = readInt(scanner);
+            System.out.print("Ay (1-12): ");
+            int month = readInt(scanner);
+            System.out.print("Gün: ");
+            int day = readInt(scanner);
+            System.out.print("Saat (0-23): ");
+            int hour = readInt(scanner);
+            System.out.print("Dakika (0-59): ");
+            int minute = readInt(scanner);
+
+            due = LocalDateTime.of(year, month, day, hour, minute);
+
+            if (due.isBefore(now)) {
+                System.out.println("Geçmiş bir bitiş tarihi girdiniz. Lütfen bugünden sonraki bir tarih girin.");
+            } else {
+                break;
+            }
+        }
+
+        System.out.print("Bu görev zamanlanmış (TimeAsk) olsun mu? (E/H): ");
+        String answer = scanner.nextLine().trim().toUpperCase();
+
+        Task task;
+
+        if (answer.equals("E")) {
+            LocalDateTime start;
+
+            while (true) {
+                System.out.println("Başlangıç zamanı:");
+                System.out.print("Yıl: ");
+                int sy = readInt(scanner);
+                System.out.print("Ay (1-12): ");
+                int sm = readInt(scanner);
+                System.out.print("Gün: ");
+                int sd = readInt(scanner);
+                System.out.print("Saat (0-23): ");
+                int sh = readInt(scanner);
+                System.out.print("Dakika (0-59): ");
+                int smin = readInt(scanner);
+
+                start = LocalDateTime.of(sy, sm, sd, sh, smin);
+
+                if (start.isBefore(now)) {
+                    System.out.println("Geçmiş bir başlangıç zamanı girdiniz. Lütfen bugünden sonraki bir zaman girin.");
+                } else if (start.isAfter(due)) {
+                    System.out.println("Başlangıç zamanı bitiş tarihinden sonra olamaz. Lütfen tekrar girin.");
+                } else {
+                    break;
+                }
+            }
+
+            System.out.print("Süre (dakika): ");
+            int duration = readInt(scanner);
+
+            task = new TimeAsk(id, title, description, start, duration);
+            task.setDeadline(new Deadline(due));
+        } else {
+            task = new Task(id, title, description);
+            task.setDeadline(new Deadline(due));
+        }
+
+        task.setPriority(priority);
+
+        return task;
     }
+
 
     private static int findNextTaskId(Project project) {
         int max = 0;
