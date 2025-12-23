@@ -38,4 +38,57 @@ public class TaskCsvRepositoryTest {
         assertEquals(2, loaded.get(0).getPriority());
         assertEquals(5, loaded.get(1).getPriority());
     }
+    @Test
+    void load_deadline_ve_completed_durumunu_korumali() throws IOException {
+        Task t1 = new Task(1, "G1", "A");
+        LocalDateTime due = LocalDateTime.of(2025, 12, 10, 12, 0);
+        t1.setDeadline(new Deadline(due));
+        t1.complete();
+
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(t1);
+
+        Path tempFile = Files.createTempFile("tasks-test2", ".csv");
+
+        TaskCsvRepository.saveTasks(tempFile.toString(), tasks);
+
+        List<Task> loaded = TaskCsvRepository.loadTasks(tempFile.toString());
+
+        assertEquals(1, loaded.size());
+        assertNotNull(loaded.get(0).getDeadline());
+        assertEquals(due, loaded.get(0).getDeadline().getDueDate());
+        assertTrue(loaded.get(0).isCompleted());
+    }
+    @Test
+    void save_load_timeask_olusturup_turu_ve_alanlari_korumali() throws IOException {
+        LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
+        TimeAsk ta = new TimeAsk(5, "TA", "D", start, 45);
+        ta.setPriority(3);
+        ta.setDeadline(new Deadline(LocalDateTime.of(2025, 12, 10, 12, 0)));
+
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(ta);
+
+        Path tempFile = Files.createTempFile("tasks-timeask", ".csv");
+
+        TaskCsvRepository.saveTasks(tempFile.toString(), tasks);
+
+        List<Task> loaded = TaskCsvRepository.loadTasks(tempFile.toString());
+
+        assertEquals(1, loaded.size());
+        assertTrue(loaded.get(0) instanceof TimeAsk);
+
+        TimeAsk loadedTa = (TimeAsk) loaded.get(0);
+        assertEquals(start, loadedTa.getStartTime());
+        assertEquals(45, loadedTa.getDurationMinutes());
+        assertEquals(3, loadedTa.getPriority());
+        assertNotNull(loadedTa.getDeadline());
+    }
+    @Test
+    void loadTasks_dosya_yoksa_bos_liste_donmeli() {
+        List<Task> loaded = TaskCsvRepository.loadTasks("olmayan_dosya_12345.csv");
+        assertNotNull(loaded);
+        assertEquals(0, loaded.size());
+    }
+
 }

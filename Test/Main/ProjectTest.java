@@ -164,4 +164,35 @@ public class ProjectTest {
         assertEquals(3, sorted.get(1).getId());
         assertEquals(1, sorted.get(2).getId());
     }
+    @Test
+    void ctor_getId_ve_getName_dogru_calismali() {
+        Project project = new Project(11, "ProjeX", "Açıklama");
+        assertEquals(11, project.getId());
+        assertEquals("ProjeX", project.getName());
+    }
+    @Test
+    void getTasksSortedByDeadline_deadline_null_olanlar_en_sonda_olmali() {
+        Project project = new Project(1, "P", "A");
+        LocalDateTime now = LocalDateTime.of(2025, 12, 10, 12, 0);
+
+        Task noDeadline = new Task(1, "Tarihsiz", "A");
+
+        Task t2 = new Task(2, "G2", "B");
+        t2.setDeadline(new Deadline(now.plusDays(1)));
+
+        Task t3 = new Task(3, "G3", "C");
+        t3.setDeadline(new Deadline(now.plusDays(2)));
+
+        project.addTask(noDeadline);
+        project.addTask(t3);
+        project.addTask(t2);
+
+        List<Task> sorted = project.getTasksSortedByDeadline();
+
+        assertEquals(3, sorted.size());
+        assertEquals(2, sorted.get(0).getId());
+        assertEquals(3, sorted.get(1).getId());
+        assertEquals(1, sorted.get(2).getId());
+    }
+
 }

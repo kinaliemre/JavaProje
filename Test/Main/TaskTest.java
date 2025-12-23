@@ -72,4 +72,21 @@ public class TaskTest {
         boolean result = task.isOverdue(LocalDateTime.now());
         assertFalse(result);
     }
+    @Test
+    void toString_bilgileri_icermeli() {
+        LocalDateTime due = LocalDateTime.of(2025, 12, 10, 12, 0);
+
+        Task task = new Task(7, "Deneme", "Desc");
+        task.setPriority(4);
+        task.setDeadline(new Deadline(due));
+
+        String s = task.toString();
+
+        assertTrue(s.contains("[7]"));
+        assertTrue(s.contains("Deneme"));
+        assertTrue(s.contains("Öncelik: 4"));
+        assertTrue(s.contains(due.toString()));
+        assertTrue(s.contains("BEKLIYOR"));
+    }
+
 }
