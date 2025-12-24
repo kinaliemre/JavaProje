@@ -233,8 +233,17 @@ public class Main {
         System.out.print("Ad Soyad: ");
         String name = scanner.nextLine();
 
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email;
+        while (true) {
+            System.out.print("Email: ");
+            email = scanner.nextLine().trim();
+
+            if (email.endsWith("@gmail.com") && email.length() > "@gmail.com".length()) {
+                break;
+            }
+
+            System.out.println("Yanlış mail girdiniz. Lütfen '@gmail.com' ile biten geçerli bir Gmail adresi girin.");
+        }
 
         String username;
         while (true) {
@@ -270,6 +279,7 @@ public class Main {
 
         return new User(newId, name, email, username, password);
     }
+
 
     private static void printMenu() {
         System.out.println();
