@@ -172,15 +172,15 @@ public class Main {
     private static void printMenu() {
         System.out.println();
         System.out.println("=== MENÜ ===");
-        System.out.println("1) Yeni görev oluştur");
-        System.out.println("2) Görevleri tarihe göre listele");
-        System.out.println("3) Tarihi geçen görevleri listele");
-        System.out.println("4) Tamamlanmış görevleri listele");
-        System.out.println("5) Görevi tamamlandı işaretle");
-        System.out.println("6) Yaklaşan görevleri listele");
-        System.out.println("7) Bildirimleri kontrol et");
-        System.out.println("8) Görevi sil");
-        System.out.println("0) Çıkış");
+        System.out.println("1) Yeni görev oluştur 💎:");
+        System.out.println("2) Görevleri tarihe göre listele 📆:");
+        System.out.println("3) Tarihi geçen görevleri listele ⚠️:");
+        System.out.println("4) Tamamlanmış görevleri listele ✅:");
+        System.out.println("5) Görevi tamamlandı işaretle ☑️:");
+        System.out.println("6) Yaklaşan görevleri listele ⏳:");
+        System.out.println("7) Bildirimleri kontrol et 🔔:");
+        System.out.println("8) Görevi sil ❎:");
+        System.out.println("0) Çıkış 👋:");
         System.out.print("Seçiminiz: ");
     }
 
