@@ -70,9 +70,9 @@ public class User {
 
         while (!authenticated) {
             System.out.println();
-            System.out.println("1) Giriş yap");
-            System.out.println("2) Kayıt ol");
-            System.out.println("0) Çıkış");
+            System.out.println("1) Giriş yap 👤:");
+            System.out.println("2) Kayıt ol 🆕:");
+            System.out.println("0) Çıkış 👋:");
             System.out.print("Seçiminiz: ");
             String firstChoice = scanner.nextLine().trim();
 
