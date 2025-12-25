@@ -15,51 +15,10 @@ public class Main {
 
     	System.out.println("=== Görev Yönetim Sistemi ===");
 
-    	List<User> users = UserCsvRepository.loadUsers(USERS_FILE);
-
-    	User user = null;
-    	boolean authenticated = false;
-
-    	while (!authenticated) {
-    	    System.out.println();
-    	    System.out.println("1) Giriş yap");
-    	    System.out.println("2) Kayıt ol");
-    	    System.out.println("0) Çıkış");
-    	    System.out.print("Seçiminiz: ");
-    	    String firstChoice = scanner.nextLine().trim();
-
-    	    switch (firstChoice) {
-    	        case "1": {
-    	            if (users.isEmpty()) {
-    	                System.out.println("Henüz kayıtlı kullanıcı yok. Lütfen önce kayıt olun.");
-    	            } else {
-    	                user = login(scanner, users);
-    	                if (user == null) {
-    	                    System.out.println("Çok fazla hatalı deneme. Program kapatılıyor.");
-    	                    scanner.close();
-    	                    return;
-    	                }
-    	                authenticated = true;
-    	            }
-    	            break;
-    	        }
-    	        case "2": {
-    	            user = register(scanner, users);
-    	            users.add(user);
-    	            UserCsvRepository.saveUsers(USERS_FILE, users);
-    	            authenticated = true;
-    	            break;
-    	        }
-    	        case "0": {
-    	            System.out.println("Program sonlandırılıyor...");
-    	            scanner.close();
-    	            return;
-    	        }
-    	        default: {
-    	            System.out.println("Geçersiz seçim, tekrar deneyin.");
-    	            break;
-    	        }
-    	    }
+    	User user = User.authenticate(scanner, USERS_FILE);
+    	if (user == null) {
+    	    scanner.close();
+    	    return;
     	}
 
     	System.out.println("Giriş başarılı, hoş geldin " + user.getName() + ".");
@@ -207,78 +166,7 @@ public class Main {
         scanner.close();
     }
 
-    private static User login(Scanner scanner, List<User> users) {
-        int attempts = 0;
-        while (attempts < 3) {
-            System.out.print("Kullanıcı adı: ");
-            String username = scanner.nextLine();
-            System.out.print("Şifre: ");
-            String password = scanner.nextLine();
 
-            for (User u : users) {
-                if (u.getUsername() != null &&
-                    u.getUsername().equals(username) &&
-                    u.checkPassword(password)) {
-                    return u;
-                }
-            }
-
-            System.out.println("Hatalı kullanıcı adı veya şifre.");
-            attempts++;
-        }
-        return null;
-    }
-    private static User register(Scanner scanner, List<User> users) {
-        System.out.println("=== Kayıt Ol ===");
-        System.out.print("Ad Soyad: ");
-        String name = scanner.nextLine();
-
-        String email;
-        while (true) {
-            System.out.print("Email: ");
-            email = scanner.nextLine().trim();
-
-            if (email.endsWith("@gmail.com") && email.length() > "@gmail.com".length()) {
-                break;
-            }
-
-            System.out.println("Yanlış mail girdiniz. Lütfen '@gmail.com' ile biten geçerli bir Gmail adresi girin.");
-        }
-
-        String username;
-        while (true) {
-            System.out.print("Kullanıcı adı: ");
-            username = scanner.nextLine();
-
-            boolean exists = false;
-            for (User u : users) {
-                if (u.getUsername() != null &&
-                    u.getUsername().equals(username)) {
-                    exists = true;
-                    break;
-                }
-            }
-
-            if (!exists) {
-                break;
-            }
-
-            System.out.println("Bu kullanıcı adı zaten kullanılıyor, başka bir tane deneyin.");
-        }
-
-        System.out.print("Şifre: ");
-        String password = scanner.nextLine();
-
-        int newId = 0;
-        for (User u : users) {
-            if (u.getId() > newId) {
-                newId = u.getId();
-            }
-        }
-        newId++;
-
-        return new User(newId, name, email, username, password);
-    }
 
 
     private static void printMenu() {
