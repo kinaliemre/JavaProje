@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class TaskCsvRepository {
-
+	// Verilen task listesini CSV dosyasına kaydeder (Task/TimeAsk ayrımı dahil)
     public static void saveTasks(String fileName, List<Task> tasks) {
         
     		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
@@ -62,13 +62,13 @@ public class TaskCsvRepository {
             System.out.println("Dosya yazma hatası: " + e.getMessage());
         }
     }
-
+    // CSV bozulmasın diye metindeki ';' karakterini güvenli hale getirir
     private static String safe(String s) {
         if (s == null) return "";
         return s.replace(";", ",");
     }
 
-  
+ // CSV dosyasından görevleri okur ve Task/TimeAsk nesnelerini geri oluşturur
     public static List<Task> loadTasks(String fileName) {
         
     		List<Task> tasks = new ArrayList<>();

@@ -10,14 +10,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class UserCsvRepositoryTest {
-
+	// Dosya yoksa loadUsers boş liste döndürüyor mu kontrol eder
     @Test
     void dosya_yoksa_loadUsers_bos_liste_donmeli() {
         List<User> users = UserCsvRepository.loadUsers("olmayan_users_12345.csv");
         assertNotNull(users);
         assertEquals(0, users.size());
     }
-
+    // save+load sonrası aynı kullanıcı verileri geri geliyor mu kontrol eder
     @Test
     void saveUsers_ve_loadUsers_roundtrip_ayni_kullanicilari_dondurmeli() throws IOException {
         List<User> users = new ArrayList<>();
@@ -44,7 +44,7 @@ public class UserCsvRepositoryTest {
         assertEquals("u2", loaded.get(1).getUsername());
         assertEquals("p2", loaded.get(1).getPassword());
     }
-
+    // saveUsers safe() ile ';' karakterini ',' yapıyor mu kontrol eder
     @Test
     void saveUsers_safe_semicolon_karakterini_virgule_cevirmeli() throws IOException {
         List<User> users = new ArrayList<>();

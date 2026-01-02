@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 
     private static final String USERS_FILE = "users.csv";
-
+ // Programın giriş noktası; TaskApp'i başlatır
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 

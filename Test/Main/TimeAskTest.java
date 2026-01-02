@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public class TimeAskTest {
-
+	// TimeAsk constructor ve getter'lar doğru mu kontrol eder
     @Test
     void ctor_ve_getterlar_dogru_calismali() {
         LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
@@ -20,7 +20,7 @@ public class TimeAskTest {
         assertEquals(start, ta.getStartTime());
         assertEquals(45, ta.getDurationMinutes());
     }
-
+    // getEndTime start + duration döndürüyor mu kontrol eder
     @Test
     void getEndTime_start_plus_duration_donmeli() {
         LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
@@ -30,7 +30,7 @@ public class TimeAskTest {
 
         assertEquals(LocalDateTime.of(2025, 12, 10, 11, 30), end);
     }
-
+    // Task'tan miras complete/isCompleted TimeAsk'te de çalışıyor mu kontrol eder
     @Test
     void inherited_complete_ve_isCompleted_calismali() {
         LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
@@ -40,7 +40,7 @@ public class TimeAskTest {
         ta.complete();
         assertTrue(ta.isCompleted());
     }
-
+    // toString hem Task hem TimeAsk alanlarını içeriyor mu kontrol eder
     @Test
     void toString_super_bilgileri_ve_timeask_bilgilerini_icer_meli() {
         LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
