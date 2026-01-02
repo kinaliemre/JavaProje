@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class TaskCsvRepositoryTest {
-
+	 // save+load sonrası aynı sayıda ve aynı temel alanlarda görev dönüyor mu kontrol eder
     @Test
     void save_ve_load_ayni_sayida_gorev_dondurmeli() throws IOException {
         Task t1 = new Task(1, "Görev 1", "Açıklama 1");
@@ -38,6 +38,7 @@ public class TaskCsvRepositoryTest {
         assertEquals(2, loaded.get(0).getPriority());
         assertEquals(5, loaded.get(1).getPriority());
     }
+    // load işlemi deadline ve completed durumunu koruyor mu kontrol eder
     @Test
     void load_deadline_ve_completed_durumunu_korumali() throws IOException {
         Task t1 = new Task(1, "G1", "A");
@@ -59,6 +60,7 @@ public class TaskCsvRepositoryTest {
         assertEquals(due, loaded.get(0).getDeadline().getDueDate());
         assertTrue(loaded.get(0).isCompleted());
     }
+ // TIMEASK türü kaydedilip geri okununca alanları korunuyor mu kontrol eder
     @Test
     void save_load_timeask_olusturup_turu_ve_alanlari_korumali() throws IOException {
         LocalDateTime start = LocalDateTime.of(2025, 12, 10, 10, 0);
@@ -84,6 +86,7 @@ public class TaskCsvRepositoryTest {
         assertEquals(3, loadedTa.getPriority());
         assertNotNull(loadedTa.getDeadline());
     }
+    // Dosya yoksa loadTasks boş liste dönüyor mu kontrol eder
     @Test
     void loadTasks_dosya_yoksa_bos_liste_donmeli() {
         List<Task> loaded = TaskCsvRepository.loadTasks("olmayan_dosya_12345.csv");

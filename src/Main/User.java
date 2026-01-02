@@ -13,7 +13,7 @@ public class User {
     private String username;
     private String password;
     private List<Project> projects;
-
+    // User oluşturur ve proje listesini başlatır
     public User(int id, String name, String email, String username, String password) {
         this.id = id;
         this.name = name;
@@ -22,39 +22,39 @@ public class User {
         this.password = password;
         this.projects = new ArrayList<>();
     }
-
+    // Kullanıcı id'sini döndürür
     public int getId() {
         return id;
     }
-
+    // Kullanıcı ad-soyad bilgisini döndürür
     public String getName() {
         return name;
     }
-
+    // Kullanıcının email bilgisini döndürür
     public String getEmail() {
         return email;
     }
-
+ // Kullanıcının kullanıcı adını döndürür
     public String getUsername() {
         return username;
     }
-
+ // Kullanıcının şifresini döndürür (dosyaya yazmak için kullanılıyor)
     public String getPassword() {
         return password;
     }
-
+    // Dışarıdan girilen şifre ile kayıtlı şifre eşleşiyor mu kontrol eder
     public boolean checkPassword(String password) {
         return this.password != null && this.password.equals(password);
     }
-
+    // Kullanıcıya yeni proje ekler
     public void addProject(Project project) {
         projects.add(project);
     }
-
+ // Kullanıcının projelerini döndürür
     public List<Project> getProjects() {
         return projects;
     }
-
+    // Tüm projelerden upcoming görevleri topluca döndürür
     public List<Task> getUpcomingTasks(LocalDateTime now) {
         List<Task> result = new ArrayList<>();
         for (Project p : projects) {
@@ -62,6 +62,7 @@ public class User {
         }
         return result;
     }
+ // Giriş/kayıt menüsünü çalıştırır ve başarılı olunca User döndürür
     public static User authenticate(Scanner scanner, String usersFile) {
         List<User> users = UserCsvRepository.loadUsers(usersFile);
 
@@ -110,7 +111,7 @@ public class User {
 
         return user;
     }
-
+    // Kullanıcı adı/şifre ile en fazla 3 denemede giriş yaptırır
     private static User login(Scanner scanner, List<User> users) {
         int attempts = 0;
         while (attempts < 3) {
@@ -132,7 +133,7 @@ public class User {
         }
         return null;
     }
-
+    // Yeni kullanıcı kaydı oluşturur (gmail, username ve boş bırakmama kontrolleriyle)
     private static User register(Scanner scanner, List<User> users) {
         System.out.println("=== Kayıt Ol ===");
 

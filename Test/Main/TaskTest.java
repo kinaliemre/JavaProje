@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public class TaskTest {
-
+	  // Task constructor ve getter'lar doğru mu kontrol eder
     @Test
     void ctor_ve_getterlar_dogru_calismali() {
         int id = 10;
@@ -21,7 +21,7 @@ public class TaskTest {
         assertEquals(0, task.getPriority());
         assertNull(task.getDeadline());
     }
-
+    // Setter'lar alanları güncelliyor mu kontrol eder
     @Test
     void setterlar_degerleri_guncellemeli() {
         Task task = new Task(1, "Eski", "Eski açıklama");
@@ -37,7 +37,7 @@ public class TaskTest {
         assertEquals(3, task.getPriority());
         assertEquals(deadline, task.getDeadline());
     }
-
+    // complete çağrısı sonrası isCompleted true oluyor mu kontrol eder
     @Test
     void complete_ve_isCompleted_durumu_degistirmeli() {
         Task task = new Task(1, "Görev", "Açıklama");
@@ -45,7 +45,7 @@ public class TaskTest {
         task.complete();
         assertTrue(task.isCompleted());
     }
-
+    // Deadline geçmişse isOverdue true oluyor mu kontrol eder
     @Test
     void isOverdue_gecmis_tarihteki_gorev_icin_true_donmeli() {
         Task task = new Task(1, "Eski görev", "Açıklama");
@@ -55,7 +55,7 @@ public class TaskTest {
         boolean result = task.isOverdue(LocalDateTime.now());
         assertTrue(result);
     }
-
+    // Deadline gelecekteyse isOverdue false oluyor mu kontrol eder
     @Test
     void isOverdue_gelecekteki_gorev_icin_false_donmeli() {
         Task task = new Task(1, "Gelecek görev", "Açıklama");
@@ -65,13 +65,15 @@ public class TaskTest {
         boolean result = task.isOverdue(LocalDateTime.now());
         assertFalse(result);
     }
-
+ // Deadline yoksa isOverdue false mu kontrol eder
     @Test
     void isOverdue_deadline_yoksa_false_donmeli() {
         Task task = new Task(1, "Görev", "Açıklama");
         boolean result = task.isOverdue(LocalDateTime.now());
         assertFalse(result);
     }
+
+    // toString beklenen temel bilgileri içeriyor mu kontrol eder
     @Test
     void toString_bilgileri_icermeli() {
         LocalDateTime due = LocalDateTime.of(2025, 12, 10, 12, 0);

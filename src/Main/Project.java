@@ -10,36 +10,34 @@ import java.util.List;
 public class Project {
     private int id;
     private String name;
-    private String description;
     private List<Task> tasks;
-
+ // Proje oluşturur ve görev listesini başlatır
     public Project(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.tasks = new ArrayList<>();
     }
-
+    // Proje id'sini döndürür
     public int getId() {
         return id;
     }
-
+ // Proje adını döndürür
     public String getName() {
         return name;
     }
-
+    // Projeye yeni görev ekler
     public void addTask(Task task) {
         tasks.add(task);
     }
-
+ // Verilen id'ye sahip görevi listeden siler (varsa true)
     public boolean removeTaskById(int taskId) {
         return tasks.removeIf(t -> t.getId() == taskId);
     }
-
+    // Projedeki tüm görev listesini döndürür
     public List<Task> getTasks() {
         return tasks;
     }
-
+    // Verilen id ile görev arar, yoksa null döndürür
     public Task findTaskById(int taskId) {
         for (Task t : tasks) {
             if (t.getId() == taskId) {
@@ -49,7 +47,7 @@ public class Project {
         return null;
     }
 
-
+ // Görevleri deadline'a göre artan sırayla döndürür (deadline null olanlar en sonda)
     public List<Task> getTasksSortedByDeadline() {
         List<Task> copy = new ArrayList<>(tasks);
         Collections.sort(copy, new Comparator<Task>() {
@@ -65,7 +63,7 @@ public class Project {
         return copy;
     }
 
-   
+    // Tamamlanmamış ve deadline'ı geçmiş görevleri döndürür
     public List<Task> getOverdueTasks(LocalDateTime now) {
         List<Task> result = new ArrayList<>();
         for (Task t : tasks) {
@@ -75,7 +73,7 @@ public class Project {
         }
         return result;
     }
-
+    // Tamamlanmış görevleri döndürür
     public List<Task> getCompletedTasks() {
         List<Task> result = new ArrayList<>();
         for (Task t : tasks) {
@@ -85,7 +83,7 @@ public class Project {
         }
         return result;
     }
-
+    // Deadline'ı olan, tamamlanmamış ve gecikmemiş görevleri (upcoming) döndürür
     public List<Task> getUpcomingTasks(LocalDateTime now) {
         List<Task> result = new ArrayList<>();
         for (Task t : tasks) {

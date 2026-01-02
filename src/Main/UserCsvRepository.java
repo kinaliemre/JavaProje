@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserCsvRepository {
-
+	 // CSV dosyasından kullanıcıları okur ve User listesi döndürür
     public static List<User> loadUsers(String fileName) {
         List<User> users = new ArrayList<>();
         File file = new File(fileName);
@@ -47,7 +47,7 @@ public class UserCsvRepository {
 
         return users;
     }
-
+ // User listesini CSV dosyasına kaydeder
     public static void saveUsers(String fileName, List<User> users) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             for (User u : users) {
@@ -64,7 +64,7 @@ public class UserCsvRepository {
             System.out.println("Kullanıcı dosyası yazma hatası: " + e.getMessage());
         }
     }
-
+    // CSV bozulmasın diye metindeki ';' karakterini güvenli hale getirir
     private static String safe(String s) {
         if (s == null) {
             return "";

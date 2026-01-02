@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
-
+	 // User ctor ve getter'lar doğru mu kontrol eder
     @Test
     void ctor_ve_getterlar_dogru_calismali() {
         User u = new User(1, "Ad Soyad", "mail@test.com", "user1", "pass");
@@ -20,25 +20,25 @@ public class UserTest {
         assertNotNull(u.getProjects());
         assertEquals(0, u.getProjects().size());
     }
-
+    // checkPassword doğru şifre için true mu kontrol eder
     @Test
     void checkPassword_dogru_sifre_icin_true_donmeli() {
         User u = new User(1, "A", "E", "U", "1234");
         assertTrue(u.checkPassword("1234"));
     }
-
+    // checkPassword yanlış şifre için false mu kontrol eder
     @Test
     void checkPassword_yanlis_sifre_icin_false_donmeli() {
         User u = new User(1, "A", "E", "U", "1234");
         assertFalse(u.checkPassword("0000"));
     }
-
+ // checkPassword kayıtlı şifre null ise false mu kontrol eder
     @Test
     void checkPassword_password_nullsa_false_donmeli() {
         User u = new User(1, "A", "E", "U", null);
         assertFalse(u.checkPassword("1234"));
     }
-
+ // addProject ile proje ekleniyor mu kontrol eder
     @Test
     void addProject_ve_getProjects_projeyi_tutmalı() {
         User u = new User(1, "A", "E", "U", "P");
@@ -49,7 +49,7 @@ public class UserTest {
         assertEquals(1, u.getProjects().size());
         assertEquals(p, u.getProjects().get(0));
     }
-
+    // getUpcomingTasks tüm projelerden upcoming görevleri topluyor mu kontrol eder
     @Test
     void getUpcomingTasks_tum_projelerden_yaklasanlari_toplamali() {
         LocalDateTime now = LocalDateTime.of(2025, 12, 10, 12, 0);

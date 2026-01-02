@@ -8,11 +8,11 @@ import java.util.Scanner;
 public class TaskApp {
 
     private final String usersFile;
-
+    // TaskApp oluşturur; kullanıcı dosyasının adını saklar
     public TaskApp(String usersFile) {
         this.usersFile = usersFile;
     }
-
+ // Uygulamanın ana akışını çalıştırır (login, dosya yükleme, menü döngüsü)
     public void start(Scanner scanner) {
 
         User user = User.authenticate(scanner, usersFile);
@@ -159,7 +159,7 @@ public class TaskApp {
             }
         }
     }
-
+    // Kullanıcıya menüyü yazdırır
     private void printMenu() {
         System.out.println();
         System.out.println("=== MENÜ ===");
@@ -174,7 +174,7 @@ public class TaskApp {
         System.out.println("0) Çıkış 👋:");
         System.out.print("Seçiminiz: ");
     }
-
+    // Kullanıcıdan güvenli şekilde int okur (hatalı girerse tekrar ister)
     private int readInt(Scanner scanner) {
         while (true) {
             String text = scanner.nextLine();
@@ -185,7 +185,7 @@ public class TaskApp {
             }
         }
     }
-
+    // Verilen task listesini ekrana basar (liste boşsa mesaj yazar)
     private void printTaskList(List<Task> tasks) {
         if (tasks.isEmpty()) {
             System.out.println("Görev yok.");
@@ -195,7 +195,7 @@ public class TaskApp {
             }
         }
     }
-
+    // Bildirim listesinde zamanı gelenleri kontrol edip ekrana basar
     private void checkNotifications(List<Notification> notifications, LocalDateTime now) {
         boolean any = false;
         for (Notification n : notifications) {
@@ -208,7 +208,7 @@ public class TaskApp {
             System.out.println("Şu anda zamanı gelen bildirim yok.");
         }
     }
-
+    // Kullanıcı girdileriyle Task veya TimeAsk oluşturur; deadline/priority set eder
     private Task createTask(Scanner scanner, int id) {
         System.out.print("Görev başlığı: ");
         String title = scanner.nextLine();
@@ -290,7 +290,7 @@ public class TaskApp {
 
         return task;
     }
-
+    // Mevcut görevlerden en büyük id'yi bulup bir sonraki id'yi üretir
     private int findNextTaskId(Project project) {
         int max = 0;
         for (Task t : project.getTasks()) {
